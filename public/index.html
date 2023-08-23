@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Proyecto</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mi Proyecto</h1>
+    
+    <h2>Equipos</h2>
+    <ul id="equipos-list" class="list-group">
+        <!-- Aquí se cargarán los equipos -->
+    </ul>
+    
+    <h2>Jugadores</h2>
+    <ul id="jugadores-list" class="list-group">
+        <!-- Aquí se cargarán los jugadores -->
+    </ul>
+    
+    <script>
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        
+        async function renderEquipos() {
+            const equiposList = document.getElementById('equipos-list');
+            const equipos = await fetchData('/equipos');
+            
+            equiposList.innerHTML = '';
+            equipos.forEach(equipo => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = equipo.nombre;
+                equiposList.appendChild(li);
+            });
+        }
+        
+        async function renderJugadores() {
+            const jugadoresList = document.getElementById('jugadores-list');
+            const jugadores = await fetchData('/jugadores');
+            
+            jugadoresList.innerHTML = '';
+            jugadores.forEach(jugador => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = `${jugador.nombre} ${jugador.apellido}`;
+                jugadoresList.appendChild(li);
+            });
+        }
+        
+        window.onload = function () {
+            renderEquipos();
+            renderJugadores();
+        };
+    </script>
+</body>
+</html>
